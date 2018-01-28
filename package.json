@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": "7.4.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -16,14 +19,4 @@
     "url": "https://github.com/heyliger/messenger-payments/issues"
   },
   "homepage": "https://github.com/heyliger/messenger-payments#readme",
-  "dependencies": {
-    "async": "^2.6.0",
-    "messenger": "0.0.9",
-    "messenger-node": "https://github.com/heyliger/messenger-node/archive/master.zip"
-  },
-  "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.6.1"
-  }
 }
