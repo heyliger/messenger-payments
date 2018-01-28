@@ -5,7 +5,7 @@ var request = require('request');
 const util = require('util');
 var webhookRouter = express.Router();
 
-var send = function(jsonBody, pageID) {
+var send = function(jsonBody, recipientID, pageID) {
   console.log("Send Message: ", util.inspect(jsonBody, {depth: null}));
   let pageAccessToken = "";
 
@@ -51,20 +51,28 @@ webhookRouter.post('/', function(req, res) {
     if (event.postback) {
       switch (event.postback.payload) {
         case "GET_STARTED":
-          var jsonBody = {
+          var response = {
+            "messaging_type": "RESPONSE",
+            "recipient": {
+              "id": senderID
+            },
             "message": {
               "text": "Choose from the menu below."
             }
           };
-          send(jsonBody, pageID);
+          send(response, pageID);
           break;
         case "GET_PSID":
-          var jsonBody = {
+          var response = {
+            "messaging_type": "RESPONSE",
+            "recipient": {
+              "id": senderID
+            },
             "message": {
               "text": "PAGE ID: " + pageID + " PSID:" + senderID
             }
           };
-          send(jsonBody, pageID);
+          send(response, pageID);
           break;
         default:
           console.log("Unknown postback: " + event.postback.payload);
