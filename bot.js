@@ -12,7 +12,7 @@ var send = function(jsonBody, pageID) {
   // choose page access token based on pageID (aka recipient.id)
   switch (pageID) {
     case "141562053314580": // @messengerdiscovertoken
-      pageAccessToken = process.env.MESSENGER_DISCOVER_TOKEN_PAT;
+      pageAccessToken = process.env.PAT_MESSENGER_DISCOVER_TOKEN;
       break;
     default:
       console.log("Unknown Page ID");
