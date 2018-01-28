@@ -6,7 +6,7 @@ const util = require('util');
 var webhookRouter = express.Router();
 
 var send = function(jsonBody, pageID) {
-  console.log("Message:", util.inspect(this.jsonBody, {depth: null}));
+  console.log("Send Message: ", util.inspect(jsonBody, {depth: null}));
   let pageAccessToken = "";
 
   // choose page access token based on pageID (aka recipient.id)
