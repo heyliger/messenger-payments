@@ -35,8 +35,6 @@ var send = function(jsonBody, pageID) {
   });
 };
 
-module.exports = SendAPIRequest;
-
 webhookRouter.get('/config.js', function(req, res) {
   res.send("var PAGE_ACCESS_TOKEN='" + process.env.PAGE_ACCESS_TOKEN + "'; " + "var FB_APP_ID='" + process.env.FB_APP_ID + "';");
 });
