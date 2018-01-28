@@ -25,7 +25,7 @@ var send = function(jsonBody, pageID) {
       access_token: pageAccessToken
     },
     method: 'POST',
-    json: this.jsonBody
+    json: jsonBody
   }, function(error, response, body) {
     if (error) {
       console.log('Error sending messages: ', error);
