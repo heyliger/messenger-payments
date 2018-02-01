@@ -66,21 +66,19 @@ try {
     request.canMakePayment().then((response) => {
       $('#callLog').prepend('<li>canMakePayment</li>');
 
-      request.show().then(function(paymentResponse) {
-        var res = JSON.stringify(paymentResponse, null, 4);
-        $('#callLog').prepend('<li>' + res + '</li>');
-
-        paymentResponse.complete('success').then(function() {
-          $('#callLog').prepend('<li>paymentResponse complete</li>');
-        });
-      }).catch(function(error) {
-        $('#errorLog').prepend('<li>error' + error + '</li>');
-      });
-
       if (response === true) {
-        // proceed
-        //$('div#error').html('all good');
+        request.show().then(function(paymentResponse) {
+          var res = JSON.stringify(paymentResponse, null, 4);
+          $('#callLog').prepend('<li>' + res + '</li>');
+          // Process the payment if using tokenized payments.
+          // Process the confirmation if using Stripe/PayPal
 
+          paymentResponse.complete('success').then(function() {
+            $('#callLog').prepend('<li>paymentResponse complete</li>');
+          });
+        }).catch(function(error) {
+          $('#errorLog').prepend('<li>error' + error + '</li>');
+        });
       } else {
         // something went wrong, e.g. invalid `displayItems` configuration
         // or the person's phone does not run a recent enough version of the app
