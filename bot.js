@@ -12,13 +12,13 @@ var send = function(jsonBody, pageID) {
   // choose page access token based on pageID (aka recipient.id)
   switch (pageID) {
     case "141562053314580": // @messengerdiscovertoken
-      pageAccessToken = "EAACHg1AwcUcBADyIUO8wQSwREt1JyVRJ6babCKutZCZCbZBvjczFpJiRQFylJkrwQiecEZBAtyZBPVu7y7IlAW9Ei9efi9HhJp8fCPc9LPxH1dmrhAPOkZA8voblLPKk0IV7TcZCE9deecTbRCrhOhkMDWRVMZBExRdmg9Owxcj73gZDZD";//process.env.PAT_MESSENGER_DISCOVER_TOKEN;
+      pageAccessToken = process.env.PAT_MESSENGER_DISCOVER_TOKEN;
       break;
     case "607251572939276": // @messengerstripe
-      pageAccessToken = "EAACHg1AwcUcBAEyNHK3dEyun9EDL42l2mxfVwKZB8XMfuXQ8qsYhUYnMJnspexIp3JfJ2XZBrF76jOmWZAmCVOqQs692ZBdfaYAaF2ZA9SbZALzbs0bPtiD3MEuUx3ZAk0dAImJbpFZBExb3ZAso9hOihirqnxhelhcLi34Vz72yLfQZDZD";//process.env.PAT_MESSENGER_DISCOVER_TOKEN;
+      pageAccessToken = process.env.PAT_MESSENGER_STRIPE;
       break;
     case "603723139959837": // @messengerpaypal
-      pageAccessToken = "EAACHg1AwcUcBACINOd6Y09kCLzuKAfNzgyi69A8QXoaUP82yegBGjFbMQoUlKuiMhodgWZBifLZB3K2yRPW7E1Uxma4RfQZBZBDOAoIjiYBi24srFvnZCThpi9sSZA4mWWGvR0EnkWXFB25Meefbv5zz9YXZCKeh32Ol6TeZCtcvrwZDZD";//process.env.PAT_MESSENGER_DISCOVER_TOKEN;
+      pageAccessToken = process.env.PAT_MESSENGER_PAYPAL;
       break;
     default:
       console.log("Unknown Page ID");
@@ -40,10 +40,6 @@ var send = function(jsonBody, pageID) {
     }
   });
 };
-
-webhookRouter.get('/config.js', function(req, res) {
-  res.send("var PAGE_ACCESS_TOKEN='" + process.env.PAGE_ACCESS_TOKEN + "'; " + "var FB_APP_ID='" + process.env.FB_APP_ID + "';");
-});
 
 webhookRouter.post('/', function(req, res) {
 
