@@ -1,3 +1,20 @@
+function getUrlParameter(sParam) {
+  var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+  sURLVariables = sPageURL.split('&'),
+  sParameterName,
+  i;
+
+  for (i = 0; i < sURLVariables.length; i++) {
+    sParameterName = sURLVariables[i].split('=');
+
+    if (sParameterName[0] === sParam) {
+      return sParameterName[1] === undefined ? true : sParameterName[1];
+    }
+  }
+};
+
+var pageID = getUrlParameter('page_id');
+
 var methodData =
 [{
   supportedMethods: ['fb'],
@@ -6,7 +23,7 @@ var methodData =
     merchantImageUrl: 'https://en.facebookbrand.com/wp-content/uploads/2016/09/messenger_icon2.png',
     confirmationText: 'Thank you!',
     termsUrl: "https://www.facebook.com/terms.php",
-    merchantFBPageId: '435409510131824',
+    merchantFBPageId: pageID,
   }
 }];
 
