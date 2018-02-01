@@ -1,0 +1,166 @@
+{
+	"info": {
+		"name": "Messenger Payments",
+		"_postman_id": "74470a00-91f8-b8a2-12c4-c66aa58b62d7",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Whitelist Domain",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"whitelisted_domains\":[\n    \"{{DOMAIN}}\"\n  ]\n}"
+				},
+				"url": {
+					"raw": "https://graph.facebook.com/v2.6/me/messenger_profile?access_token={{PAGE_ACCESS_TOKEN}}",
+					"protocol": "https",
+					"host": [
+						"graph",
+						"facebook",
+						"com"
+					],
+					"path": [
+						"v2.6",
+						"me",
+						"messenger_profile"
+					],
+					"query": [
+						{
+							"key": "access_token",
+							"value": "{{PAGE_ACCESS_TOKEN}}",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get Started",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"get_started\": {\"payload\": \"GET_STARTED\"}\n}"
+				},
+				"url": {
+					"raw": "https://graph.facebook.com/v2.6/me/messenger_profile?access_token={{PAGE_ACCESS_TOKEN}}",
+					"protocol": "https",
+					"host": [
+						"graph",
+						"facebook",
+						"com"
+					],
+					"path": [
+						"v2.6",
+						"me",
+						"messenger_profile"
+					],
+					"query": [
+						{
+							"key": "access_token",
+							"value": "{{PAGE_ACCESS_TOKEN}}",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Persistent Menu",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"persistent_menu\":[\n    {\n      \"locale\":\"default\",\n      \"composer_input_disabled\": true,\n      \"call_to_actions\":[\n        {\n          \"title\":\"Get PSID\",\n          \"type\":\"postback\",\n          \"payload\":\"GET_PSID\"\n        },\n        {\n          \"type\":\"web_url\",\n          \"title\":\"Native Web Payments\",\n          \"url\":\"{{DOMAIN}}/payments.html?page_id={{PAGE_ID}}\",\n          \"webview_height_ratio\":\"full\",\n          \"messenger_extensions\": true \n        }\n      ]\n    }\n  ]\n}"
+				},
+				"url": {
+					"raw": "https://graph.facebook.com/v2.6/me/messenger_profile?access_token={{PAGE_ACCESS_TOKEN}}",
+					"protocol": "https",
+					"host": [
+						"graph",
+						"facebook",
+						"com"
+					],
+					"path": [
+						"v2.6",
+						"me",
+						"messenger_profile"
+					],
+					"query": [
+						{
+							"key": "access_token",
+							"value": "{{PAGE_ACCESS_TOKEN}}",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Public Key",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"payment_settings\" : {\n    \"public_key\" : \"-----BEGIN PGP PUBLIC KEY BLOCK-----\\nVersion: GnuPG v2.0.22 (GNU/Linux)\\n\\n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\\n=nm9C\\n-----END PGP PUBLIC KEY BLOCK-----\\n\"\n  }\n}"
+				},
+				"url": {
+					"raw": "https://graph.facebook.com/v2.6/me/messenger_profile?access_token={{PAGE_ACCESS_TOKEN}}",
+					"protocol": "https",
+					"host": [
+						"graph",
+						"facebook",
+						"com"
+					],
+					"path": [
+						"v2.6",
+						"me",
+						"messenger_profile"
+					],
+					"query": [
+						{
+							"key": "access_token",
+							"value": "{{PAGE_ACCESS_TOKEN}}",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
