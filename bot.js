@@ -140,9 +140,6 @@ webhookRouter.post('/', function(req, res) {
 
     if (event.checkout_update) {
       var response = {
-        "recipient":{
-          "id": senderID
-        },
         "shipping":[
           {
             "option_id":"1",
@@ -166,7 +163,8 @@ webhookRouter.post('/', function(req, res) {
           }
         ]
       };
-      send(response, pageID);
+      res.send(response);
+      //send(response, pageID);
     }
 
     if (event.payment) {
