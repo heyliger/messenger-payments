@@ -137,11 +137,12 @@ webhookRouter.post('/', function(req, res) {
       send(response, pageID);
     }
 
-    // "recipient":{
-    //   "id": senderID
-    // },
+
     if (event.checkout_update) {
       var response = {
+        "recipient":{
+          "id": senderID
+        },[
         "shipping":[
           {
             "option_id":"1",
@@ -163,7 +164,7 @@ webhookRouter.post('/', function(req, res) {
               }
             ]
           }
-        ]
+        ]]
       };
       send(response, pageID);
     }
