@@ -50,12 +50,12 @@ const standardShipping = {
   id: 'standard',
   label: 'Standard shipping',
   amount: {currency: 'USD', value: '1.10'},
+  selected: true,
 };
 const expressShipping = {
   id: 'express',
   label: 'Express shipping',
   amount: {currency: 'USD', value: '1.20'},
-  selected: true,
 }
 
 /**
