@@ -135,8 +135,8 @@ webhookRouter.post('/', function(req, res) {
 
     if (event.pre_checkout) {
       var response = {
-        "success": true;
-      }
+        "success": true
+      };
       send(response, pageID);
     }
 
