@@ -168,7 +168,7 @@ try {
       details = paymentDetails(giftPrice, null);
     }
     $('#callLog').prepend('<li>Payment details: ' + JSON.stringify(details, null, 4) + '</li>');
-    let request = new MessengerExtensions.PaymentRequest( methodData, details, additionalOptions);
+    let request = new MessengerExtensions.PaymentRequest(methodData, details, additionalOptions);
 
     // The user has aborted the flow.
     request.addEventListener('checkoutcancel', () => {
@@ -223,7 +223,7 @@ try {
             $('#callLog').prepend('<li>paymentResponse complete</li>');
           });
         }).catch(function(error) {
-          $('#errorLog').prepend('<li>error: ' + error + '</li>');
+          $('#errorLog').prepend('<li>error 1: ' + error + '</li>');
         });
       } else {
         // something went wrong, e.g. invalid `displayItems` configuration
@@ -233,7 +233,7 @@ try {
     })
     .catch((error) => {
       // an error such as `InvalidStateError` if a payment is already in process
-      $('#errorLog').prepend('<li>error: ' + error + '</li>');
+      $('#errorLog').prepend('<li>error 2: ' + error + '</li>');
     });
   }
 }
