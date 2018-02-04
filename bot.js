@@ -77,57 +77,54 @@ webhookRouter.post('/', function(req, res) {
           send(response, pageID);
           break;
         case "BUY_BUTTON":
-            var response = {
-              "messaging_type": "RESPONSE",
-              "recipient":{
-                "id": senderID
-              },
-              "message":{
-                "attachment":{
-                  "type":"template",
-                  "payload":{
-                    "template_type":"generic",
-                    "elements":[
-                       {
-                        "title":"T-Shirt",
-                        "image_url":"https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Blue_Tshirt.jpg/220px-Blue_Tshirt.jpg",
-                        "subtitle":"Blue",
-                        "buttons":[{
-              	        	"type":"payment",
-              		        "title":"Buy Now",
-              		        "payload":"BUY_BUTTON_PAYLOAD",
-              		        "payment_summary":{
-              		          "currency":"USD",
-              		          "payment_type":"FLEXIBLE_AMOUNT",
-              		          "is_test_payment" : true,
-              		          "merchant_name":"Payments Test",
-              		          "requested_user_info":[
-              		            "shipping_address",
-              		            "contact_name",
-              		            "contact_phone",
-              		            "contact_email"
-              		          ],
-            	              "price_list":[
-              	              {
-              	                "label":"Subtotal",
-              	                "amount":"1.00"
-              	              },
-              	              {
-              	                "label":"Taxes",
-              	                "amount":".07"
-              	                }
-              	              ]
-              	            }
-                          }
-                        ]
-                      }
-                    ]
-                  }
+          var response = {
+            "messaging_type": "RESPONSE",
+            "recipient":{
+              "id": senderID
+            },
+            "message":{
+              "attachment":{
+                "type":"template",
+                "payload":{
+                  "template_type":"generic",
+                  "elements":[{
+                    "title":"T-Shirt",
+                    "image_url":"https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Blue_Tshirt.jpg/220px-Blue_Tshirt.jpg",
+                    "subtitle":"Blue",
+                    "buttons":[{
+          	        	"type":"payment",
+          		        "title":"Buy Now",
+          		        "payload":"BUY_BUTTON_PAYLOAD",
+          		        "payment_summary":{
+          		          "currency":"USD",
+          		          "payment_type":"FLEXIBLE_AMOUNT",
+          		          "is_test_payment" : true,
+          		          "merchant_name":"Payments Test",
+          		          "requested_user_info":[
+          		            "shipping_address",
+          		            "contact_name",
+          		            "contact_phone",
+          		            "contact_email"
+          		          ],
+        	              "price_list":[
+          	              {
+          	                "label":"Subtotal",
+          	                "amount":"1.00"
+          	              },
+          	              {
+          	                "label":"Taxes",
+          	                "amount":".07"
+        	                }
+        	              ]
+        	            }
+                    }]
+                  }]
                 }
               }
-            };
-            send(response, pageID);
-            break;
+            }
+          };
+          send(response, pageID);
+          break;
         default:
           console.log("Unknown postback: " + event.postback.payload);
       }
@@ -153,11 +150,7 @@ webhookRouter.post('/', function(req, res) {
             "price_list":[
               {
                 "label":"Shipping",
-                "amount":1.10
-              },
-              {
-                "label":"Tax",
-                "amount":.07
+                "amount":"1.10"
               }
             ]
           },
@@ -167,11 +160,7 @@ webhookRouter.post('/', function(req, res) {
             "price_list":[
               {
                 "label":"Shipping",
-                "amount":1.20
-              },
-              {
-                "label":"Tax",
-                "amount":0.07
+                "amount":"1.20"
               }
             ]
           }
