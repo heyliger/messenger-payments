@@ -142,8 +142,8 @@ webhookRouter.post('/', function(req, res) {
       var response = {
         "recipient":{
           "id": senderID
-        },[
-        "shipping":[
+        },
+        {"shipping":[
           {
             "option_id":"1",
             "option_title":"Standard",
@@ -164,7 +164,7 @@ webhookRouter.post('/', function(req, res) {
               }
             ]
           }
-        ]]
+        ]}
       };
       send(response, pageID);
     }
