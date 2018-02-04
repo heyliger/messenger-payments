@@ -15,6 +15,9 @@ function getUrlParameter(sParam) {
 
 var pageID = getUrlParameter('page_id');
 
+/**
+ * The payment options configuration.
+ */
 var methodData =
 [{
   supportedMethods: ['fb'],
@@ -27,31 +30,88 @@ var methodData =
   }
 }];
 
-var paymentDetails =
-{
-  displayItems: [
-    {
-      label: 'T-shirt',
-      amount: {
-        currency: 'USD',
-        value : '1.00'
-      },
-    }
-  ],
-  total: {
-    label: 'Total due', // defaults to "Total"
-    amount: {
-      currency: 'USD',
-      value : '1.00'
-    },
-  },
-};
-
+/**
+ * The additional payment options configuration.
+ */
 var additionalOptions = {
   requestShipping: false, // if shipping is required
-  requestPayerName: true, // name of the payer sent with the final response
-  requestPayerEmail: true, // email address
+  requestPayerName: false, // name of the payer sent with the final response
+  requestPayerEmail: false, // email address
   requestPayerPhone: false, // phone number
+};
+
+/**
+ * Shipping option configurations.
+ */
+const standardShipping = {
+  id: 'standard',
+  label: 'Standard shipping',
+  amount: {currency: 'USD', value: '1.10'},
+};
+const expressShipping = {
+  id: 'express',
+  label: 'Express shipping',
+  amount: {currency: 'USD', value: '1.20'},
+  selected: true,
+}
+
+/**
+* Calculate tax of the item.
+*
+* @param {String} price Cost of the item being purchased.
+* @returns {String} Tax of the item.
+*/
+const calculateTax = (price) => {
+  return (price * .07).toFixed(2);
+};
+
+/**
+* Calculate total price including shipping and tax of the item.
+*
+* @param {String} price Cost of the item being purchased.
+* @param {String} shipping Shipping cost of the item being purchased.
+* @returns {String} Total price including shipping and tax of purchased item.
+*/
+const calculateTotal = (price, shipping) => {
+  return (price * 1.07 + parseFloat(shipping)).toFixed(2);
+};
+
+/**
+* Build payment details based on gift price.
+*
+* @param {String} giftId Id of the item being purchased.
+* @param {Object} shipping Selected shipping option.
+* @returns {Object} paymentDetails passed into the SDK payment request.
+*/
+const paymentDetails = (price, shipping) => {
+
+  return {
+    displayItems: [
+      {
+        label: 'T-Shirt',
+        amount: {
+          currency: 'USD',
+          value : price
+        },
+      },
+      {
+        label: 'Sales Tax',
+        amount: {
+          currency: 'USD',
+          value : calculateTax(price)
+        },
+      },
+     shipping
+    ],
+    total: {
+      label: 'Total due',
+      amount: {
+        currency: 'USD',
+        value : calculateTotal(price, shipping.amount.value)
+      },
+    },
+    shippingOptions: [standardShipping, expressShipping]
+  };
 };
 
 window.extAsyncInit = function() {
@@ -60,8 +120,61 @@ window.extAsyncInit = function() {
 
 try {
   function makePayment() {
+
+    // default shipping option to express
+    var currentShippingOption = 'express';
+    var giftPrice = 1;
+
+    var details = paymentDetails(giftPrice, expressShipping);
+    $('#callLog').prepend('<li>Payment details: ' + JSON.stringify(details, null, 4) + '</li>');
+
+    // Set options from checkbox values.
+    additionalOptions.requestShipping = $("#cb_shipping").is(':checked') ? true : false;
+    additionalOptions.requestPayerName = $("#cb_name").is(':checked') ? true : false;
+    additionalOptions.requestPayerEmail = $("#cb_email").is(':checked') ? true : false;
+    additionalOptions.requestPayerPhone = $("#cb_phone").is(':checked') ? true : false;
+
     $('#callLog').prepend('<li>makePayment</li>');
-    let request = new MessengerExtensions.PaymentRequest( methodData, paymentDetails, additionalOptions);
+    let request = new MessengerExtensions.PaymentRequest( methodData, details, additionalOptions);
+
+    // The user has aborted the flow.
+    request.addEventListener('checkoutcancel', () => {
+      $('#callLog').prepend('<li>Checkout Cancel</li>');
+    });
+
+    // Register shipping address change callback
+    request.addEventListener('shippingaddresschange', function(evt) {
+      evt.updateWith(new Promise(function(resolve, reject) {
+        const address = evt.target.shippingAddress;
+        // re-calculate shipping cost based on address change.
+        $('#callLog').prepend('<li>Shipping address change</li>');
+
+        if (currentShippingOption === 'standard') {
+          details = paymentDetails(giftPrice, standardShipping);
+        } else {
+          details = paymentDetails(giftPrice, expressShipping);
+        }
+        resolve(details);
+      }));
+    });
+
+    // Register shipping option change callback
+    request.addEventListener('shippingoptionchange', function(evt) {
+      evt.updateWith(new Promise(function(resolve, reject) {
+        const option = evt.target.shippingOption;
+        // re-calculate shipping cost based on option change
+        $('#callLog').prepend('<li>Shipping option change</li>');
+
+        // update shipping type
+        if (option === 'standard') {
+          details = paymentDetails(giftPrice, standardShipping);
+        } else {
+          details = paymentDetails(giftPrice, expressShipping);
+        }
+        currentShippingOption = option;
+        resolve(details);
+      }));
+    });
 
     request.canMakePayment().then((response) => {
       $('#callLog').prepend('<li>canMakePayment</li>');
