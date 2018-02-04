@@ -133,6 +133,13 @@ webhookRouter.post('/', function(req, res) {
       }
     }
 
+    if (event.pre_checkout) {
+      var response = {
+        "success": true;
+      }
+      send(response, pageID);
+    }
+
     if (event.checkout_update) {
       var response = {
         "shipping":[
@@ -167,6 +174,10 @@ webhookRouter.post('/', function(req, res) {
         ]
       }
       send(response, pageID);
+    }
+
+    if (event.payment) {
+      // TODO: process payment
     }
   })
   res.sendStatus(200);
