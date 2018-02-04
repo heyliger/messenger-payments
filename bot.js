@@ -89,9 +89,9 @@ webhookRouter.post('/', function(req, res) {
                     "template_type":"generic",
                     "elements":[
                        {
-                        "title":"Welcome",
+                        "title":"T-Shirt",
                         "image_url":"https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Blue_Tshirt.jpg/220px-Blue_Tshirt.jpg",
-                        "subtitle":"T-Shirt",
+                        "subtitle":"Blue",
                         "buttons":[{
               	        	"type":"payment",
               		        "title":"Buy Now",
@@ -131,6 +131,42 @@ webhookRouter.post('/', function(req, res) {
         default:
           console.log("Unknown postback: " + event.postback.payload);
       }
+    }
+
+    if (event.checkout_update) {
+      var response = {
+        "shipping":[
+          {
+            "option_id":"1",
+            "option_title":"Standard",
+            "price_list":[
+              {
+                "label":"Shipping",
+                "amount":1.10
+              },
+              {
+                "label":"Tax",
+                "amount":.07
+              }
+            ]
+          },
+          {
+            "option_id":"2",
+            "option_title":"Express",
+            "price_list":[
+              {
+                "label":"Shipping",
+                "amount":1.20
+              },
+              {
+                "label":"Tax",
+                "amount":0.07
+              }
+            ]
+          }
+        ]
+      }
+      send(response, pageID);
     }
   })
   res.sendStatus(200);
