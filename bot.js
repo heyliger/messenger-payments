@@ -98,7 +98,7 @@ webhookRouter.post('/', function(req, res) {
               		        "payload":"BUY_BUTTON_PAYLOAD",
               		        "payment_summary":{
               		          "currency":"USD",
-              		          "payment_type":"FIXED_AMOUNT",
+              		          "payment_type":"FLEXIBLE_AMOUNT",
               		          "is_test_payment" : true,
               		          "merchant_name":"Payments Test",
               		          "requested_user_info":[
