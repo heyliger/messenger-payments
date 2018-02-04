@@ -89,7 +89,6 @@ const calculateTotal = (price, shipping) => {
 const paymentDetails = (price, shipping) => {
 
   if (shipping) {
-
     return {
       displayItems: [
         {
