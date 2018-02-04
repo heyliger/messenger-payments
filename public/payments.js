@@ -14,6 +14,9 @@ function getUrlParameter(sParam) {
 };
 
 var pageID = getUrlParameter('page_id');
+var giftPrice = 1;
+var currentShippingOption = '';
+var details = null;
 
 /**
  * The payment options configuration.
@@ -79,11 +82,16 @@ const calculateTotal = (price, shipping) => {
 /**
 * Build payment details based on gift price.
 *
-* @param {String} giftId Id of the item being purchased.
+* @param {String} price Price of the item being purchased.
 * @param {Object} shipping Selected shipping option.
 * @returns {Object} paymentDetails passed into the SDK payment request.
 */
 const paymentDetails = (price, shipping) => {
+
+  var shippingCost = 0;
+  if (shipping) {
+    shippingCost = shipping.amount.value;
+  }
 
   return {
     displayItems: [
@@ -107,7 +115,7 @@ const paymentDetails = (price, shipping) => {
       label: 'Total due',
       amount: {
         currency: 'USD',
-        value : calculateTotal(price, shipping.amount.value)
+        value : calculateTotal(price, shippingCost)
       },
     },
     shippingOptions: [standardShipping, expressShipping]
@@ -120,13 +128,7 @@ window.extAsyncInit = function() {
 
 try {
   function makePayment() {
-
-    // default shipping option to express
-    var currentShippingOption = 'express';
-    var giftPrice = 1;
-
-    var details = paymentDetails(giftPrice, expressShipping);
-    $('#callLog').prepend('<li>Payment details: ' + JSON.stringify(details, null, 4) + '</li>');
+    $('#callLog').prepend('<li>makePayment</li>');
 
     // Set options from checkbox values.
     additionalOptions.requestShipping = $("#cb_shipping").is(':checked') ? true : false;
@@ -134,7 +136,14 @@ try {
     additionalOptions.requestPayerEmail = $("#cb_email").is(':checked') ? true : false;
     additionalOptions.requestPayerPhone = $("#cb_phone").is(':checked') ? true : false;
 
-    $('#callLog').prepend('<li>makePayment</li>');
+    if (additionalOptions.requestShipping === true) {
+      // default shipping option to express
+      currentShippingOption = 'express';
+      details = paymentDetails(giftPrice, expressShipping);
+    } else {
+      details = paymentDetails(giftPrice, null);
+    }
+    $('#callLog').prepend('<li>Payment details: ' + JSON.stringify(details, null, 4) + '</li>');
     let request = new MessengerExtensions.PaymentRequest( methodData, details, additionalOptions);
 
     // The user has aborted the flow.
