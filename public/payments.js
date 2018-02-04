@@ -88,38 +88,63 @@ const calculateTotal = (price, shipping) => {
 */
 const paymentDetails = (price, shipping) => {
 
-  var shippingCost = 0;
   if (shipping) {
-    shippingCost = shipping.amount.value;
-  }
 
-  return {
-    displayItems: [
-      {
-        label: 'T-Shirt',
+    return {
+      displayItems: [
+        {
+          label: 'T-Shirt',
+          amount: {
+            currency: 'USD',
+            value : price
+          },
+        },
+        {
+          label: 'Sales Tax',
+          amount: {
+            currency: 'USD',
+            value : calculateTax(price)
+          },
+        },
+       shipping
+      ],
+      total: {
+        label: 'Total due',
         amount: {
           currency: 'USD',
-          value : price
+          value : calculateTotal(price, shipping.amount.value)
         },
       },
-      {
-        label: 'Sales Tax',
+      shippingOptions: [standardShipping, expressShipping]
+    };
+
+  } else {
+    return {
+      displayItems: [
+        {
+          label: 'T-Shirt',
+          amount: {
+            currency: 'USD',
+            value : price
+          },
+        },
+        {
+          label: 'Sales Tax',
+          amount: {
+            currency: 'USD',
+            value : calculateTax(price)
+          },
+        }
+      ],
+      total: {
+        label: 'Total due',
         amount: {
           currency: 'USD',
-          value : calculateTax(price)
+          value : calculateTotal(price, 0)
         },
-      },
-     shipping
-    ],
-    total: {
-      label: 'Total due',
-      amount: {
-        currency: 'USD',
-        value : calculateTotal(price, shippingCost)
-      },
-    },
-    shippingOptions: [standardShipping, expressShipping]
-  };
+      }
+    };
+  }
 };
 
 window.extAsyncInit = function() {
@@ -137,9 +162,9 @@ try {
     additionalOptions.requestPayerPhone = $("#cb_phone").is(':checked') ? true : false;
 
     if (additionalOptions.requestShipping === true) {
-      // default shipping option to express
-      currentShippingOption = 'express';
-      details = paymentDetails(giftPrice, expressShipping);
+      // default shipping option to standard
+      currentShippingOption = standardShipping.id;
+      details = paymentDetails(giftPrice, standardShipping);
     } else {
       details = paymentDetails(giftPrice, null);
     }
@@ -148,7 +173,7 @@ try {
 
     // The user has aborted the flow.
     request.addEventListener('checkoutcancel', () => {
-      $('#callLog').prepend('<li>Checkout Cancel</li>');
+      $('#callLog').prepend('<li>Checkout cancel</li>');
     });
 
     // Register shipping address change callback
@@ -158,7 +183,7 @@ try {
         // re-calculate shipping cost based on address change.
         $('#callLog').prepend('<li>Shipping address change</li>');
 
-        if (currentShippingOption === 'standard') {
+        if (currentShippingOption === standardShipping.id) {
           details = paymentDetails(giftPrice, standardShipping);
         } else {
           details = paymentDetails(giftPrice, expressShipping);
@@ -175,7 +200,7 @@ try {
         $('#callLog').prepend('<li>Shipping option change</li>');
 
         // update shipping type
-        if (option === 'standard') {
+        if (option === standardShipping.id) {
           details = paymentDetails(giftPrice, standardShipping);
         } else {
           details = paymentDetails(giftPrice, expressShipping);
@@ -199,17 +224,17 @@ try {
             $('#callLog').prepend('<li>paymentResponse complete</li>');
           });
         }).catch(function(error) {
-          $('#errorLog').prepend('<li>error' + error + '</li>');
+          $('#errorLog').prepend('<li>error: ' + error + '</li>');
         });
       } else {
         // something went wrong, e.g. invalid `displayItems` configuration
         // or the person's phone does not run a recent enough version of the app
-        $('#errorLog').prepend('<li>response false</li>');
+        $('#errorLog').prepend('<li>Response false</li>');
       }
     })
     .catch((error) => {
       // an error such as `InvalidStateError` if a payment is already in process
-      $('#errorLog').prepend('<li>' + error + '</li>');
+      $('#errorLog').prepend('<li>error: ' + error + '</li>');
     });
   }
 }
