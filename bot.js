@@ -79,46 +79,50 @@ webhookRouter.post('/', function(req, res) {
         case "BUY_BUTTON":
             var response = {
               "messaging_type": "RESPONSE",
-              "recipient": {
+              "recipient":{
                 "id": senderID
               },
-              "message": {
-                "payload": {
-                  "template_type":"generic",
-                  "elements":[
-                     {
-                      "title":"Buy Now",
-                      "image_url":"https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Blue_Tshirt.jpg/220px-Blue_Tshirt.jpg",
-                      "subtitle":"T-Shirt",
-                    },
-                  "buttons": [{
-                    "type":"payment",
-                      "title":"buy",
-                      "payload":"BUY_BUTTON_PAYLOAD",
-                      "payment_summary":{
-                        "currency":"USD",
-                        "payment_type":"FIXED_AMOUNT",
-                        "is_test_payment" : true,
-                        "merchant_name":"Payments Test",
-                        "requested_user_info":[
-                          "shipping_address",
-                          "contact_name",
-                          "contact_phone",
-                          "contact_email"
-                        ],
-                        "price_list":[
-                          {
-                            "label":"Subtotal",
-                            "amount":"1.00"
-                          },
-                          {
-                            "label":"Taxes",
-                            "amount":".07"
+              "message":{
+                "attachment":{
+                  "type":"template",
+                  "payload":{
+                    "template_type":"generic",
+                    "elements":[
+                       {
+                        "title":"Welcome",
+                        "image_url":"https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Blue_Tshirt.jpg/220px-Blue_Tshirt.jpg",
+                        "subtitle":"T-Shirt",
+                        "buttons":[{
+              	        	"type":"payment",
+              		        "title":"Buy Now",
+              		        "payload":"BUY_BUTTON_PAYLOAD",
+              		        "payment_summary":{
+              		          "currency":"USD",
+              		          "payment_type":"FIXED_AMOUNT",
+              		          "is_test_payment" : true,
+              		          "merchant_name":"Payments Test",
+              		          "requested_user_info":[
+              		            "shipping_address",
+              		            "contact_name",
+              		            "contact_phone",
+              		            "contact_email"
+              		          ],
+            	              "price_list":[
+              	              {
+              	                "label":"Subtotal",
+              	                "amount":"1.00"
+              	              },
+              	              {
+              	                "label":"Taxes",
+              	                "amount":".07"
+              	                }
+              	              ]
+              	            }
                           }
                         ]
                       }
-                    }
-                  ]
+                    ]
+                  }
                 }
               }
             };
