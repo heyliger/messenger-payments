@@ -43,6 +43,8 @@ var send = function(jsonBody, pageID) {
 
 webhookRouter.post('/', function(req, res) {
 
+  var returnOK = true;
+
   let messagingEvents = req.body.entry[0].messaging;
   messagingEvents.forEach(function(event) {
 
@@ -134,7 +136,8 @@ webhookRouter.post('/', function(req, res) {
       var response = {
         "success": true
       };
-      return res.send(response);
+      res.send(response);
+      returnOK = false;
     }
 
     if (event.checkout_update) {
@@ -162,14 +165,17 @@ webhookRouter.post('/', function(req, res) {
           }
         ]
       };
-      return res.send(response);
+      res.send(response);
+      returnOK = false;
     }
 
     if (event.payment) {
       // TODO: process payment
     }
   })
-  //res.sendStatus(200);
+  if (returnOK === true) {
+    res.sendStatus(200);
+  }
 });
 
 module.exports = webhookRouter;
