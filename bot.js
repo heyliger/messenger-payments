@@ -134,7 +134,7 @@ webhookRouter.post('/', function(req, res) {
       var response = {
         "success": true
       };
-      send(response, pageID);
+      res.send(response);
     }
 
     if (event.checkout_update) {
@@ -162,7 +162,7 @@ webhookRouter.post('/', function(req, res) {
           }
         ]
       };
-      return res.status(200).send(response);
+      return res.send(response);
     }
 
     if (event.payment) {
