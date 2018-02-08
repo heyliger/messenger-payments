@@ -162,8 +162,7 @@ webhookRouter.post('/', function(req, res) {
           }
         ]
       };
-      res.send(response);
-      return;
+      return res.status(200).send(response);
     }
 
     if (event.payment) {
