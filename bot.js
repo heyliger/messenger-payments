@@ -134,7 +134,7 @@ webhookRouter.post('/', function(req, res) {
       var response = {
         "success": true
       };
-      res.send(response);
+      return res.send(response);
     }
 
     if (event.checkout_update) {
@@ -169,8 +169,7 @@ webhookRouter.post('/', function(req, res) {
       // TODO: process payment
     }
   })
-  console.log("END");
-  res.sendStatus(200);
+  //res.sendStatus(200);
 });
 
 module.exports = webhookRouter;
