@@ -169,6 +169,7 @@ webhookRouter.post('/', function(req, res) {
       // TODO: process payment
     }
   })
+  console.log("END");
   res.sendStatus(200);
 });
 
