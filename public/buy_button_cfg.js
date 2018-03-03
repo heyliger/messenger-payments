@@ -25,7 +25,7 @@ try {
         $.ajax({
           type: "POST",
           url: '/webhook/pay-config/save/' + thread_context.psid,
-          data: {config:config, is_test:is_test},
+          data: {config:JSON.stringify(config), is_test:is_test},
         });
       },
       function error(err){
