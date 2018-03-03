@@ -33,4 +33,6 @@ try {
       }
     );
   }
+} catch (e) {
+	$('#errorLog').prepend('<li>saveConfig error: ' + e.message + '</li>');
 }
