@@ -5,6 +5,14 @@ var request = require('request');
 const util = require('util');
 var webhookRouter = express.Router();
 
+
+const default_requested_info = [
+  "shipping_address",
+  "contact_name",
+  "contact_phone",
+  "contact_email"
+];
+
 var send = function(jsonBody, pageID) {
   console.log("Send Message: ", util.inspect(jsonBody, {depth: null}));
   let pageAccessToken = "";
@@ -79,6 +87,9 @@ webhookRouter.post('/', function(req, res) {
           send(response, pageID);
           break;
         case "BUY_BUTTON":
+          var is_test_payment = pay_config[senderID] === null ? true : pay_config[senderID]['is_test_payment'];
+          var requested_user_info = pay_config[senderID] === null ? default_requested_info : pay_config[senderID]['requested_user_info'];
+
           var response = {
             "messaging_type": "RESPONSE",
             "recipient":{
@@ -100,14 +111,9 @@ webhookRouter.post('/', function(req, res) {
           		        "payment_summary":{
           		          "currency":"USD",
           		          "payment_type":"FLEXIBLE_AMOUNT",
-          		          "is_test_payment" : true,
+          		          "is_test_payment" : is_test_payment,
           		          "merchant_name":"Payments Test",
-          		          "requested_user_info":[
-          		            "shipping_address",
-          		            "contact_name",
-          		            "contact_phone",
-          		            "contact_email"
-          		          ],
+          		          "requested_user_info": requested_user_info,
         	              "price_list":[
           	              {
           	                "label":"Subtotal",
@@ -175,6 +181,31 @@ webhookRouter.post('/', function(req, res) {
   })
   if (returnOK === true) {
     res.sendStatus(200);
+  }
+});
+
+
+var pay_config = {};
+
+webhookRouter.get('/pay-config/:psid', function (req, res) {
+  const psid = req.params.psid;
+  if (!(psid in pay_config)) {
+    res.send({});
+  }
+  res.send(pay_config[psid]);
+});
+
+webhookRouter.post('/pay-config/save/:psid', function (req, res) {
+  console.log('Params: ' + util.inspect(req.params));
+
+  const psid = req.params.psid;
+  if (!(psid in pay_config)) {
+    pay_config[psid] = {'is_test_payment' => true, 'requested_user_info' => [
+      "shipping_address",
+      "contact_name",
+      "contact_phone",
+      "contact_email"
+    ]};
   }
 });
 
