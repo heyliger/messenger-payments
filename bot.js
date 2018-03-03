@@ -196,7 +196,7 @@ webhookRouter.get('/pay-config/:psid', function (req, res) {
 });
 
 webhookRouter.post('/pay-config/save/:psid', function (req, res) {
-  console.log(req.body.config[]);
+  console.log(req.body.config);
   console.log(req.body.is_test);
 
   var is_test_payment = req.body.is_test === null ? true : false;
