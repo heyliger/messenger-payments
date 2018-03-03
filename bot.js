@@ -196,17 +196,16 @@ webhookRouter.get('/pay-config/:psid', function (req, res) {
 });
 
 webhookRouter.post('/pay-config/save/:psid', function (req, res) {
-  console.log('Params: ' + util.inspect(req));
+  console.log(req.body.config[]);
+  console.log(req.body.is_test);
+
+  var is_test_payment = req.body.is_test === null ? true : false;
+  var config = req.body.config[] === null ? default_requested_info : req.body.config[]
 
   const psid = req.params.psid;
-  if (!(psid in pay_config)) {
-    pay_config[psid] = {'is_test_payment': true, 'requested_user_info': [
-      "shipping_address",
-      "contact_name",
-      "contact_phone",
-      "contact_email"
-    ]};
-  }
+  //if (!(psid in pay_config)) {
+  pay_config[psid] = {'is_test_payment': is_test_payment, 'requested_user_info': config};
+  //}
 });
 
 module.exports = webhookRouter;
