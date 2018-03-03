@@ -196,7 +196,7 @@ webhookRouter.get('/pay-config/:psid', function (req, res) {
 });
 
 webhookRouter.post('/pay-config/save/:psid', function (req, res) {
-  console.log('Params: ' + util.inspect(req.params));
+  console.log('Params: ' + util.inspect(req));
 
   const psid = req.params.psid;
   if (!(psid in pay_config)) {
