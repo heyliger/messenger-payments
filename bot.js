@@ -200,7 +200,7 @@ webhookRouter.post('/pay-config/save/:psid', function (req, res) {
 
   const psid = req.params.psid;
   if (!(psid in pay_config)) {
-    pay_config[psid] = {'is_test_payment' => true, 'requested_user_info' => [
+    pay_config[psid] = {'is_test_payment': true, 'requested_user_info': [
       "shipping_address",
       "contact_name",
       "contact_phone",
