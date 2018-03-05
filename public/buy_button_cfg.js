@@ -1,3 +1,8 @@
+// the Messenger Extensions JS SDK is done loading
+window.extAsyncInit = function() {
+  loadConfig();
+};
+
 try {
   function loadConfig() {
 
@@ -15,9 +20,7 @@ try {
           $.inArray('contact_name', data.config) ? $("#cb_name").prop('checked', true) : $("#cb_name").prop('checked', false);
           $.inArray('contact_email', data.config) ? $("#cb_email").prop('checked', true) : $("#cb_email").prop('checked', false);
           $.inArray('contact_phone', data.config) ? $("#cb_phone").prop('checked', true) : $("#cb_phone").prop('checked', false);
-
         });
-
       },
       function error(err){
         $('#errorLog').prepend('<li>' + err + '</li>');
