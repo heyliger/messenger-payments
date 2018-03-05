@@ -13,7 +13,7 @@ try {
         $.get("/webhook/pay-config/" + thread_context.psid, function( data ) {
           $('#callLog').prepend('<li>pay-config: ' + data + '</li>');
 
-          data['is_test'] ? $("#cb_test").prop('checked', true) : $("#cb_test").prop('checked', false);
+          data['is_test_payment'] ? $("#cb_test").prop('checked', true) : $("#cb_test").prop('checked', false);
           $.inArray('shipping_address', data.config) ? $("#cb_shipping").prop('checked', true) : $("#cb_shipping").prop('checked', false);
           $.inArray('contact_name', data.config) ? $("#cb_name").prop('checked', true) : $("#cb_name").prop('checked', false);
           $.inArray('contact_email', data.config) ? $("#cb_email").prop('checked', true) : $("#cb_email").prop('checked', false);
@@ -41,7 +41,7 @@ try {
         var config = [];
 
         // Set options from checkbox values.
-        var is_test = $("#cb_test").is(':checked') ? true : false;
+        var is_test_payment = $("#cb_test").is(':checked') ? true : false;
         if ($("#cb_shipping").is(':checked')){
           config.push("shipping_address");
         }
@@ -58,7 +58,7 @@ try {
         $.ajax({
           type: "POST",
           url: '/webhook/pay-config/save/' + thread_context.psid,
-          data: {config:JSON.stringify(config), is_test:is_test},
+          data: {config:JSON.stringify(config), is_test_payment:is_test_payment},
         });
       },
       function error(err){

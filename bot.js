@@ -5,13 +5,16 @@ var request = require('request');
 const util = require('util');
 var webhookRouter = express.Router();
 
-
+// Default buy button requested info to all fields.
 const default_requested_info = [
   "shipping_address",
   "contact_name",
   "contact_phone",
   "contact_email"
 ];
+
+// Store buy button payment config in memory per PSID.
+var pay_config = {};
 
 var send = function(jsonBody, pageID) {
   console.log("Send Message: ", util.inspect(jsonBody, {depth: null}));
@@ -185,27 +188,24 @@ webhookRouter.post('/', function(req, res) {
 });
 
 
-var pay_config = {};
 
 webhookRouter.get('/pay-config/:psid', function (req, res) {
   const psid = req.params.psid;
   if (!(psid in pay_config)) {
-    res.send({is_test: true, config: JSON.stringify(default_requested_info)});
+    res.send({is_test_payment: true, config: JSON.stringify(default_requested_info)});
   }
   res.send(pay_config[psid]);
 });
 
 webhookRouter.post('/pay-config/save/:psid', function (req, res) {
   console.log(req.body.config);
-  console.log(req.body.is_test);
+  console.log(req.body.is_test_payment);
 
-  var is_test_payment = req.body.is_test === null ? true : false;
+  var is_test_payment = req.body.is_test_payment === null ? true : false;
   var config = req.body.config === null ? default_requested_info : req.body.config
 
   const psid = req.params.psid;
-  //if (!(psid in pay_config)) {
   pay_config[psid] = {'is_test_payment': is_test_payment, 'requested_user_info': config};
-  //}
 });
 
 module.exports = webhookRouter;
