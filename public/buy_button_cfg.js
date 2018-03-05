@@ -11,13 +11,13 @@ try {
         $('#callLog').prepend('<li>loadConfig</li>');
 
         $.get("/webhook/pay-config/" + thread_context.psid, function( data ) {
-          $('#callLog').prepend('<li>pay-config: ' + data + '</li>');
+          $('#callLog').prepend('<li>pay-config: ' + JSON.stringify(data, null, 4) + '</li>');
 
           data['is_test_payment'] ? $("#cb_test").prop('checked', true) : $("#cb_test").prop('checked', false);
-          $.inArray('shipping_address', data.config) ? $("#cb_shipping").prop('checked', true) : $("#cb_shipping").prop('checked', false);
-          $.inArray('contact_name', data.config) ? $("#cb_name").prop('checked', true) : $("#cb_name").prop('checked', false);
-          $.inArray('contact_email', data.config) ? $("#cb_email").prop('checked', true) : $("#cb_email").prop('checked', false);
-          $.inArray('contact_phone', data.config) ? $("#cb_phone").prop('checked', true) : $("#cb_phone").prop('checked', false);
+          $.inArray('shipping_address', data.requested_user_info) === -1 ? $("#cb_shipping").prop('checked', false) : $("#cb_shipping").prop('checked', true);
+          $.inArray('contact_name', data.requested_user_info) === -1 ? $("#cb_name").prop('checked', false) : $("#cb_name").prop('checked', true);
+          $.inArray('contact_email', data.requested_user_info) === -1 ? $("#cb_email").prop('checked', false) : $("#cb_email").prop('checked', true);
+          $.inArray('contact_phone', data.requested_user_info) === -1 ? $("#cb_phone").prop('checked', false) : $("#cb_phone").prop('checked', true);
         });
       },
       function error(err){
@@ -38,27 +38,27 @@ try {
       function success(thread_context){
         $('#callLog').prepend('<li>saveConfig</li>');
 
-        var config = [];
+        var requested_user_info = [];
 
         // Set options from checkbox values.
         var is_test_payment = $("#cb_test").is(':checked') ? true : false;
         if ($("#cb_shipping").is(':checked')){
-          config.push("shipping_address");
+          requested_user_info.push("shipping_address");
         }
         if ($("#cb_name").is(':checked')){
-          config.push("contact_name");
+          requested_user_info.push("contact_name");
         }
         if ($("#cb_email").is(':checked')){
-          config.push("contact_email");
+          requested_user_info.push("contact_email");
         }
         if ($("#cb_phone").is(':checked')){
-          config.push("contact_phone");
+          requested_user_info.push("contact_phone");
         }
 
         $.ajax({
           type: "POST",
           url: '/webhook/pay-config/save/' + thread_context.psid,
-          data: {config:JSON.stringify(config), is_test_payment:is_test_payment},
+          data: {requested_user_info:JSON.stringify(requested_user_info), is_test_payment:is_test_payment},
         });
       },
       function error(err){

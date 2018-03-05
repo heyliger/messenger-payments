@@ -90,8 +90,8 @@ webhookRouter.post('/', function(req, res) {
           send(response, pageID);
           break;
         case "BUY_BUTTON":
-          var is_test_payment = pay_config[senderID] === null ? true : pay_config[senderID]['is_test_payment'];
-          var requested_user_info = pay_config[senderID] === null ? default_requested_info : pay_config[senderID]['requested_user_info'];
+          var is_test_payment = pay_config[senderID] == null ? true : pay_config[senderID]['is_test_payment'];
+          var requested_user_info = pay_config[senderID] == null ? default_requested_info : pay_config[senderID]['requested_user_info'];
 
           var response = {
             "messaging_type": "RESPONSE",
@@ -191,22 +191,31 @@ webhookRouter.post('/', function(req, res) {
 /**
  * Return buy button config for PSID
  *
- * @returns {undefined}
+ * @returns Buy button payment settings
  */
 webhookRouter.get('/pay-config/:psid', function (req, res) {
   const psid = req.params.psid;
   if (!(psid in pay_config)) {
-    res.send({is_test_payment: true, config: JSON.stringify(default_requested_info)});
+    res.send({is_test_payment: true, requested_user_info: default_requested_info});
   }
   res.send(pay_config[psid]);
 });
 
+/**
+ * Set buy button config for PSID
+ *
+ * @returns {undefined}
+ */
 webhookRouter.post('/pay-config/save/:psid', function (req, res) {
-  var is_test_payment = req.body.is_test_payment === null ? true : (req.body.is_test_payment == true);
-  var config = req.body.config === null ? default_requested_info : req.body.config
+  try {
+    var is_test_payment = req.body.is_test_payment == null ? true : (req.body.is_test_payment == true);
+    var requested_user_info = req.body.requested_user_info == null ? default_requested_info : JSON.parse(req.body.requested_user_info)
 
-  const psid = req.params.psid;
-  pay_config[psid] = {'is_test_payment': is_test_payment, 'requested_user_info': config};
+    const psid = req.params.psid;
+    pay_config[psid] = {'is_test_payment': is_test_payment, 'requested_user_info': requested_user_info};
+  } catch (e) {
+    console.log(e);
+  }
 });
 
 module.exports = webhookRouter;
