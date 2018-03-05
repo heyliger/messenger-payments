@@ -10,7 +10,7 @@ try {
       function success(thread_context){
         $('#callLog').prepend('<li>loadConfig</li>');
 
-        $.get("/webhook/pay-config/", function( data ) {
+        $.get("/webhook/pay-config/" + thread_context.psid, function( data ) {
           $('#callLog').prepend('<li>pay-config: ' + data + '</li>');
 
           if (data['is_test']){
