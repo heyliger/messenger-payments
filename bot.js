@@ -188,7 +188,11 @@ webhookRouter.post('/', function(req, res) {
 });
 
 
-
+/**
+ * Return buy button config for PSID
+ *
+ * @returns {undefined}
+ */
 webhookRouter.get('/pay-config/:psid', function (req, res) {
   const psid = req.params.psid;
   if (!(psid in pay_config)) {
@@ -198,10 +202,7 @@ webhookRouter.get('/pay-config/:psid', function (req, res) {
 });
 
 webhookRouter.post('/pay-config/save/:psid', function (req, res) {
-  console.log(req.body.config);
-  console.log(req.body.is_test_payment);
-
-  var is_test_payment = req.body.is_test_payment === null ? true : false;
+  var is_test_payment = req.body.is_test_payment === null ? true : (req.body.is_test_payment == true);
   var config = req.body.config === null ? default_requested_info : req.body.config
 
   const psid = req.params.psid;
