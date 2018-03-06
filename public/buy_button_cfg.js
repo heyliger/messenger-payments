@@ -58,7 +58,7 @@ try {
         $.ajax({
           type: "POST",
           url: '/webhook/pay-config/save/' + thread_context.psid,
-          data: {requested_user_info:JSON.stringify(requested_user_info), is_test_payment:is_test_payment},
+          data: {requested_user_info: JSON.stringify(requested_user_info), is_test_payment: is_test_payment},
         });
       },
       function error(err){

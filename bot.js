@@ -194,7 +194,7 @@ webhookRouter.post('/', function(req, res) {
  * @returns Buy button payment settings
  */
 webhookRouter.get('/pay-config/:psid', function (req, res) {
-  const psid = req.params.psid;
+  var psid = req.params.psid;
   if (!(psid in pay_config)) {
     res.send({is_test_payment: true, requested_user_info: default_requested_info});
   }
@@ -208,10 +208,10 @@ webhookRouter.get('/pay-config/:psid', function (req, res) {
  */
 webhookRouter.post('/pay-config/save/:psid', function (req, res) {
   try {
-    var is_test_payment = req.body.is_test_payment == null ? true : (req.body.is_test_payment == true);
+    var is_test_payment = req.body.is_test_payment == null ? true : (JSON.parse(req.body.is_test_payment));
     var requested_user_info = req.body.requested_user_info == null ? default_requested_info : JSON.parse(req.body.requested_user_info)
 
-    const psid = req.params.psid;
+    var psid = req.params.psid;
     pay_config[psid] = {'is_test_payment': is_test_payment, 'requested_user_info': requested_user_info};
   } catch (e) {
     console.log(e);
