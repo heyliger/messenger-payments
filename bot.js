@@ -150,6 +150,12 @@ webhookRouter.post('/', function(req, res) {
     }
 
     if (event.checkout_update) {
+
+      // Randomize shipping amount when a change of address is recieved.
+      var standard = (Math.random() * (-1) + 2);
+      // Make express 1 dollar more than standard.
+      var express = (standard + 1);
+
       var response = {
         "shipping":[
           {
@@ -158,7 +164,7 @@ webhookRouter.post('/', function(req, res) {
             "price_list":[
               {
                 "label":"Shipping",
-                "amount":"1.10"
+                "amount":standard.toFixed(2)
               }
             ]
           },
@@ -168,7 +174,7 @@ webhookRouter.post('/', function(req, res) {
             "price_list":[
               {
                 "label":"Shipping",
-                "amount":"1.20"
+                "amount":express.toFixed(2)
               }
             ]
           }
